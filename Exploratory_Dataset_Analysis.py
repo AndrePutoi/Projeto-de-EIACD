@@ -1,15 +1,28 @@
-import statistics
 import pandas as pd
+import statistics as stats
 
-# Verificar quantas variáveis e quantos valores nulos existem
-df_u = pd.read_csv("Dataset_raw/Dataset_Uncleaned", low_memory=False)
-dataset_1 = pd.read_csv('Dataset_raw/kc_house_data.csv', low_memory=False)
-dataset_2 = pd.read_csv('Dataset_raw/Zillow_Austin_11-16-22.csv', low_memory=False)
-dataset_1 = dataset_1.drop(
-    columns=['id', 'sqft_living', 'floors', 'waterfront', 'view', 'condition', 'grade', 'sqft_above', 'sqft_basement',
-             'yr_renovated', 'sqft_living15', 'sqft_lot15'])
-dataset_2 = dataset_2.drop(
-    columns=['unformattedPrice', 'address', 'addressStreet', 'addressCity', 'addressState', 'isZillowOwned',
-             'variableData', 'badgeInfo', 'pgapt', 'sgapt', 'zestimate', 'info3String', 'brokerName'])
-print(dataset_2.isnull().sum())
-print(dataset_1.isnull().sum())
+# Vamos Calcular a média, mediana e moda, desvio padrao e variancia de 'price', 'lotSize', 'livingArea', 'bathrooms', 'bedrooms', 'yearBuilt'
+
+df_u = pd.read_csv('data.csv')
+
+def Estatistica(df_u, coluna):
+    print("Media de ", coluna, ": ", stats.mean(df_u[coluna]))
+    print("Mediana de ", coluna, ": ", stats.median(df_u[coluna]))
+    print("Moda de ", coluna, ": ", stats.mode(df_u[coluna]))
+    print("Desvio Padrao de ", coluna, ": ", stats.stdev(df_u[coluna]))
+    print("Variancia de ", coluna, ": ", stats.variance(df_u[coluna]))
+    print("\n")
+
+Estatistica(df_u, 'price')
+Estatistica(df_u, 'lotSize')
+Estatistica(df_u, 'livingArea')
+Estatistica(df_u, 'bathrooms')
+Estatistica(df_u, 'bedrooms')
+Estatistica(df_u, 'yearBuilt')
+
+
+# A partir de analise grafica, analisar a distribuicao de cada variavel
+
+
+
+# A partir de analise grafica, verificar se duas variaveis tem correlacao
