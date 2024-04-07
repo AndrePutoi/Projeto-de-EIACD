@@ -43,7 +43,9 @@ dataset_2 = dataset_2.drop(columns=['abbreviatedAddress', 'brokerageName', 'days
 dataset_1 = dataset_1.assign(city='Seattle')
 
 
-
+#alterar o tipo da data no 'dataSold' do dataset 2 (epoch date to american date (mm/dd/yyyy))
+dataset_2['dateSold'] = pd.to_datetime(dataset_2['dateSold'], unit='ms')
+dataset_2['dateSold'] = dataset_2['dateSold'].dt.strftime('%m/%d/%Y')
 
 # Junção dos datasets
 df = pd.concat([dataset_1, dataset_2], ignore_index=True)
