@@ -7,6 +7,8 @@ from scipy import stats
 # Verificar quantas variáveis e quantos valores nulos existem
 df_u = pd.read_csv("Uncleaned_Dataset/Dataset_Uncleaned.csv", low_memory=False)
 #print(df_u.isnull().sum())
+#retirar o 'Unnamed: 0'
+df_u.drop('Unnamed: 0', axis=1, inplace=True)
 
 # Se existirem valores nulos, se existe uma razão para isso, relacionado com outra variável
 
@@ -16,7 +18,6 @@ df_u = pd.read_csv("Uncleaned_Dataset/Dataset_Uncleaned.csv", low_memory=False)
 
 def Comparar_variavel(df_u, variavel):
     head = list(df_u.columns)
-    head.pop(0)  # Eliminar 'Unnamed: 0'
     head.remove(variavel)
     missing_inc = df_u[variavel].isnull()
     df_miss = df_u[missing_inc]
@@ -105,40 +106,11 @@ def Grafico_de_disperção(df_u,val1, val2):
     plt.scatter(X, y)
     plt.show()
 
-#Grafico_de_disperção(df_u, 'price', 'lotSize')
-#Grafico_de_disperção(df_u, 'price', 'livingArea')
-#Grafico_de_disperção(df_u, 'price', 'bathrooms')
-#Grafico_de_disperção(df_u, 'price', 'bedrooms')
-#Grafico_de_disperção(df_u, 'price', 'yearBuilt')
-#Grafico_de_disperção(df_u, 'price', 'latitude')
-#Grafico_de_disperção(df_u, 'price', 'longitude')
+col = ['price', 'bedrooms', 'bathrooms', 'livingArea', 'lotSize', 'yearBuilt']
+for i in range(len(col)):
+    for j in range(i+1, len(col)):
+        Grafico_de_disperção(df_u, col[i], col[j])
 
-#Grafico_de_disperção(df_u, 'lotSize', 'livingArea')
-#Grafico_de_disperção(df_u, 'lotSize', 'bathrooms')
-#Grafico_de_disperção(df_u, 'lotSize', 'bedrooms')
-#Grafico_de_disperção(df_u, 'lotSize', 'yearBuilt')
-#Grafico_de_disperção(df_u, 'lotSize', 'latitude')
-#Grafico_de_disperção(df_u, 'lotSize', 'longitude')
-
-#Grafico_de_disperção(df_u, 'livingArea', 'bathrooms')
-#Grafico_de_disperção(df_u, 'livingArea', 'bedrooms')
-#Grafico_de_disperção(df_u, 'livingArea', 'yearBuilt')
-#Grafico_de_disperção(df_u, 'livingArea', 'latitude')
-#Grafico_de_disperção(df_u, 'livingArea', 'longitude')
-
-#Grafico_de_disperção(df_u, 'bathrooms', 'bedrooms')
-#Grafico_de_disperção(df_u, 'bathrooms', 'yearBuilt')
-#Grafico_de_disperção(df_u, 'bathrooms', 'latitude')
-#Grafico_de_disperção(df_u, 'bathrooms', 'longitude')
-
-#Grafico_de_disperção(df_u, 'bedrooms', 'yearBuilt')
-#Grafico_de_disperção(df_u, 'bedrooms', 'latitude')
-#Grafico_de_disperção(df_u, 'bedrooms', 'longitude')
-
-#Grafico_de_disperção(df_u, 'yearBuilt', 'latitude')
-#Grafico_de_disperção(df_u, 'yearBuilt', 'longitude')
-
-#Grafico_de_disperção(df_u, 'latitude', 'longitude')
 
 #Após analisar os graficos de disperção, foi verificado que existem outliers, usaremos o metodo de z-score para remover os outliers
 
@@ -147,11 +119,11 @@ def remove_outliers(df_u, col):
     df_u_sample = df_u_sample[[col]]
     df_u_sample = df_u_sample.dropna()
     z = np.abs(stats.zscore(df_u_sample))
-    threshold = 3
+    threshold = 4
     df_u.drop(df_u[(z > threshold).all(axis=1)].index, inplace=True)
 
 remove_outliers(df_u, 'price')
-remove_outliers(df_u, 'lotSize')
+#remove_outliers(df_u, 'lotSize')
 remove_outliers(df_u, 'livingArea')
 remove_outliers(df_u, 'bathrooms')
 remove_outliers(df_u, 'bedrooms')
@@ -159,33 +131,18 @@ remove_outliers(df_u, 'yearBuilt')
 
 #Verificar se ainda existem outliers
 
-#Grafico_de_disperção(df_u, 'price', 'lotSize')
-#Grafico_de_disperção(df_u, 'price', 'livingArea')
-#Grafico_de_disperção(df_u, 'price', 'bathrooms')
-#Grafico_de_disperção(df_u, 'price', 'bedrooms')
-#Grafico_de_disperção(df_u, 'price', 'yearBuilt')
+for i in range(len(col)):
+    for j in range(i+1, len(col)):
+        Grafico_de_disperção(df_u, col[i], col[j])
 
+#Apos uma primeira verificação, os outliers foram removidos com sucesso, à exceçao de 'lotSize', pois demasiados dados foram removidos, vamos tentar remover os outliers de 'lotSize' de outra forma, ou ver se a remoção de outliers de outras variáveis afetou 'lotSize'
 
-#Grafico_de_disperção(df_u, 'lotSize', 'livingArea')
-#Grafico_de_disperção(df_u, 'lotSize', 'bathrooms')
-#Grafico_de_disperção(df_u, 'lotSize', 'bedrooms')
-#Grafico_de_disperção(df_u, 'lotSize', 'yearBuilt')
-
-
-#Grafico_de_disperção(df_u, 'livingArea', 'bathrooms')
-#Grafico_de_disperção(df_u, 'livingArea', 'bedrooms')
-#Grafico_de_disperção(df_u, 'livingArea', 'yearBuilt')
-
-
-#Grafico_de_disperção(df_u, 'bathrooms', 'bedrooms')
-#Grafico_de_disperção(df_u, 'bathrooms', 'yearBuilt')
-
-
-#Grafico_de_disperção(df_u, 'bedrooms', 'yearBuilt')
+#Apos verificar os graficos de disperção, os outliers foram removidos com sucesso
 
 #Colocar as datas de venda no formato '%d/%m/%Y'
 
-df_u['dateSold'] = pd.to_datetime(df_u['dateSold'], format='%d/%m/%Y')
+df_u['dateSold'] = pd.to_datetime(df_u['dateSold'], format='%m/%d/%Y')
+df_u['dateSold'] = df_u['dateSold'].dt.strftime('%d/%m/%Y')
 
 #assim o dataset ja foi limpo de Nan data e outliers
 df_u.to_csv('Cleaned_Dataset/Dataset_Cleaned.csv')
