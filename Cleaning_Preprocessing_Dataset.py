@@ -58,9 +58,9 @@ df_u.dropna(subset=['yearBuilt', 'latitude', 'longitude', 'bathrooms', 'bedrooms
 #se livingArea > moda de lotSize e livingArea < mediana de lotSize, preencher com a mediana de lotSize
 #se livingArea > mediana de lotSize, apagar a linha, a media é desproporcionalmente maior que a mediana e moda
 lotSize_mode = statts.mode(df_u['lotSize'])
-lotSize_median = statts.median(df_u['lotSize'])
+lotSize_mean = statts.mean(df_u['lotSize'])
 df_u.loc[(df_u['lotSize'].isnull()==False) & (df_u['livingArea'] < lotSize_mode), 'lotSize'] = lotSize_mode
-df_u.loc[(df_u['lotSize'].isnull()==False) & (df_u['livingArea'] > lotSize_mode) & (df_u['livingArea'] < lotSize_median), 'lotSize'] = lotSize_median
+df_u.loc[(df_u['lotSize'].isnull()==False) & (df_u['livingArea'] > lotSize_mode) & (df_u['livingArea'] < lotSize_mean), 'lotSize'] = lotSize_mean
 df_u.dropna(subset=['lotSize'], inplace=True)  # Remover as linhas onde 'lotSize' é nulo após os ajustes
 
 #verificar se ainda existem valores nulos em 'lotSize'
@@ -106,10 +106,10 @@ def Grafico_de_disperção(df_u,val1, val2):
     plt.scatter(X, y)
     plt.show()
 
-col = ['price', 'bedrooms', 'bathrooms', 'livingArea', 'lotSize', 'yearBuilt']
-for i in range(len(col)):
-    for j in range(i+1, len(col)):
-        Grafico_de_disperção(df_u, col[i], col[j])
+#col = ['price', 'bedrooms', 'bathrooms', 'livingArea', 'lotSize', 'yearBuilt']
+#for i in range(len(col)):
+#    for j in range(i+1, len(col)):
+#        Grafico_de_disperção(df_u, col[i], col[j])
 
 
 #Após analisar os graficos de disperção, foi verificado que existem outliers, usaremos o metodo de z-score para remover os outliers
@@ -131,9 +131,9 @@ remove_outliers(df_u, 'yearBuilt')
 
 #Verificar se ainda existem outliers
 
-for i in range(len(col)):
-    for j in range(i+1, len(col)):
-        Grafico_de_disperção(df_u, col[i], col[j])
+#for i in range(len(col)):
+#    for j in range(i+1, len(col)):
+#        Grafico_de_disperção(df_u, col[i], col[j])
 
 #Apos uma primeira verificação, os outliers foram removidos com sucesso, à exceçao de 'lotSize', pois demasiados dados foram removidos, vamos tentar remover os outliers de 'lotSize' de outra forma, ou ver se a remoção de outliers de outras variáveis afetou 'lotSize'
 
@@ -145,6 +145,6 @@ df_u['dateSold'] = pd.to_datetime(df_u['dateSold'], format='%m/%d/%Y')
 df_u['dateSold'] = df_u['dateSold'].dt.strftime('%d/%m/%Y')
 
 #assim o dataset ja foi limpo de Nan data e outliers
-df_u.to_csv('Cleaned_Dataset/Dataset_Cleaned.csv')
+df_u.to_csv('Cleaned_Dataset/Dataset_Cleaned.csv', index=False)
 
 

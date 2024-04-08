@@ -3,7 +3,7 @@ import statistics as stats
 
 # Vamos Calcular a média, mediana e moda, desvio padrao e variancia de 'price', 'lotSize', 'livingArea', 'bathrooms', 'bedrooms', 'yearBuilt'
 
-df_u = pd.read_csv('data.csv')
+df_u = pd.read_csv('Cleaned_Dataset/Dataset_Cleaned.csv')
 
 def Estatistica(df_u, coluna):
     print("Media de ", coluna, ": ", stats.mean(df_u[coluna]))
