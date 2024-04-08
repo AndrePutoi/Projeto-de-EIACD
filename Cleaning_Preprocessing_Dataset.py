@@ -37,7 +37,6 @@ def Comparar_variavel(df_u, variavel):
 #Comparar_variavel(df_u, 'bathrooms')
 #Comparar_variavel(df_u, 'livingArea')
 
-#Foi verificado que o tipo de distribuição dos valores nulos é aleatória, pois nenhum dos valores nulos tem uma distribuição comparavel a outra variável
 
 #Sendo assim vamos tratar dos valores nulos de 'yearBuilt', 'latitude' e 'longitude', 'bathroom' apagando as linhas onde os mesmos estão presentes
 
@@ -55,8 +54,8 @@ df_u.dropna(subset=['yearBuilt', 'latitude', 'longitude', 'bathrooms', 'bedrooms
 
 #Após ver a media, mediana e moda,para tratar dos nan da variavel 'lotSize' vamos preencher da seguinte forma:
 #se livingArea < moda de lotSize, preencher com a moda de lotSize
-#se livingArea > moda de lotSize e livingArea < mediana de lotSize, preencher com a mediana de lotSize
-#se livingArea > mediana de lotSize, apagar a linha, a media é desproporcionalmente maior que a mediana e moda
+#se livingArea > moda de lotSize e livingArea < media de lotSize, preencher com a media de lotSize
+#se livingArea > media de lotSize, apagar a linha, a media é desproporcionalmente maior que a mediana e moda
 lotSize_mode = statts.mode(df_u['lotSize'])
 lotSize_mean = statts.mean(df_u['lotSize'])
 df_u.loc[(df_u['lotSize'].isnull()==False) & (df_u['livingArea'] < lotSize_mode), 'lotSize'] = lotSize_mode
@@ -68,9 +67,9 @@ df_u.dropna(subset=['lotSize'], inplace=True)  # Remover as linhas onde 'lotSize
 
 #Fazer o mesmo para 'livingArea'
 
-print("Media de livingArea: ", statts.mean(df_u['livingArea'].dropna()))
-print("Mediana de livingArea: ", statts.median(df_u['livingArea']))
-print("Moda de livingArea: ", statts.mode(df_u['livingArea']))
+#print("Media de livingArea: ", statts.mean(df_u['livingArea'].dropna()))
+#print("Mediana de livingArea: ", statts.median(df_u['livingArea']))
+#print("Moda de livingArea: ", statts.mode(df_u['livingArea']))
 
 #Após ver a media, mediana e moda,para tratar dos nan da variavel 'livingArea' vamos preencher da seguinte forma:
 #se lotSize < mediana de livingArea, eliminar a linha
@@ -106,7 +105,7 @@ def Grafico_de_disperção(df_u,val1, val2):
     plt.scatter(X, y)
     plt.show()
 
-#col = ['price', 'bedrooms', 'bathrooms', 'livingArea', 'lotSize', 'yearBuilt']
+col = ['price', 'bedrooms', 'bathrooms', 'livingArea', 'lotSize', 'yearBuilt']
 #for i in range(len(col)):
 #    for j in range(i+1, len(col)):
 #        Grafico_de_disperção(df_u, col[i], col[j])
@@ -129,11 +128,20 @@ remove_outliers(df_u, 'bathrooms')
 remove_outliers(df_u, 'bedrooms')
 remove_outliers(df_u, 'yearBuilt')
 
+#Eliminar alinha com "lotSize" > 25000
+
+df_u.drop(df_u[df_u['lotSize'] > 25000].index, inplace=True)
+
+#tornar 'bathrooms' em inteiros
+
+df_u['bathrooms'] = df_u['bathrooms'].astype(int)
+
+
 #Verificar se ainda existem outliers
 
-#for i in range(len(col)):
-#    for j in range(i+1, len(col)):
-#        Grafico_de_disperção(df_u, col[i], col[j])
+for i in range(len(col)):
+    for j in range(i+1, len(col)):
+        Grafico_de_disperção(df_u, col[i], col[j])
 
 #Apos uma primeira verificação, os outliers foram removidos com sucesso, à exceçao de 'lotSize', pois demasiados dados foram removidos, vamos tentar remover os outliers de 'lotSize' de outra forma, ou ver se a remoção de outliers de outras variáveis afetou 'lotSize'
 
@@ -145,6 +153,6 @@ df_u['dateSold'] = pd.to_datetime(df_u['dateSold'], format='%m/%d/%Y')
 df_u['dateSold'] = df_u['dateSold'].dt.strftime('%d/%m/%Y')
 
 #assim o dataset ja foi limpo de Nan data e outliers
-df_u.to_csv('Cleaned_Dataset/Dataset_Cleaned.csv', index=False)
+df_u.to_csv('Cleaned_Dataset/Dataset_Cleaned.csv')
 
 
