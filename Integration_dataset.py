@@ -56,4 +56,4 @@ dataset_2['dateSold'] = dataset_2['dateSold'].dt.strftime('%m/%d/%Y')
 df = pd.concat([dataset_1, dataset_2], ignore_index=True)
 
 file_raw ="Uncleaned_Dataset/Dataset_Uncleaned.csv"
-df.to_csv(file_raw)
+df.to_csv(file_raw, index=False)

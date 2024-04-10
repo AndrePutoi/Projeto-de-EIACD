@@ -8,7 +8,7 @@ from scipy import stats
 df_u = pd.read_csv("Uncleaned_Dataset/Dataset_Uncleaned.csv", low_memory=False)
 #print(df_u.isnull().sum())
 #retirar o 'Unnamed: 0'
-df_u.drop('Unnamed: 0', axis=1, inplace=True)
+
 
 # Se existirem valores nulos, se existe uma razão para isso, relacionado com outra variável
 
@@ -118,7 +118,7 @@ def remove_outliers(df_u, col):
     df_u_sample = df_u_sample[[col]]
     df_u_sample = df_u_sample.dropna()
     z = np.abs(stats.zscore(df_u_sample))
-    threshold = 4
+    threshold = 3
     df_u.drop(df_u[(z > threshold).all(axis=1)].index, inplace=True)
 
 remove_outliers(df_u, 'price')
@@ -131,6 +131,7 @@ remove_outliers(df_u, 'yearBuilt')
 #Eliminar alinha com "lotSize" > 25000
 
 df_u.drop(df_u[df_u['lotSize'] > 25000].index, inplace=True)
+df_u.drop(df_u[df_u['lotSize'] < 100].index, inplace=True)
 
 #tornar 'bathrooms' em inteiros
 
@@ -153,6 +154,6 @@ df_u['dateSold'] = pd.to_datetime(df_u['dateSold'], format='%m/%d/%Y')
 df_u['dateSold'] = df_u['dateSold'].dt.strftime('%d/%m/%Y')
 
 #assim o dataset ja foi limpo de Nan data e outliers
-df_u.to_csv('Cleaned_Dataset/Dataset_Cleaned.csv')
+df_u.to_csv('Cleaned_Dataset/Dataset_Cleaned.csv', index=False)
 
 
